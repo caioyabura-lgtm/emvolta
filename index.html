@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Estratégia de Projeto | Espetáculo Imersivo para Planetário</title>
+  <style>
+    :root {
+      --bg: #f6f1e8;
+      --paper: #fffaf1;
+      --ink: #23201c;
+      --muted: #6b6258;
+      --line: #d8c7ad;
+      --brand: #6b3f22;
+      --brand2: #1f5d5b;
+      --accent: #d99b3d;
+      --danger: #8a2d2d;
+      --ok: #2f6b43;
+      --soft: #efe1cc;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(217, 155, 61, 0.20), transparent 35%),
+        linear-gradient(180deg, #f8f1e5 0%, #efe4d1 100%);
+      line-height: 1.55;
+    }
+
+    .page {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 32px 0 56px;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2a2018, #684020 58%, #1f5d5b);
+      color: #fff7e8;
+      border-radius: 28px;
+      padding: 42px;
+      box-shadow: 0 20px 40px rgba(38, 27, 17, 0.20);
+      position: relative;
+      overflow: hidden;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      inset: auto -80px -120px auto;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      border: 32px solid rgba(255,255,255,0.08);
+    }
+
+    .eyebrow {
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.78rem;
+      color: #f3c679;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: clamp(2rem, 5vw, 4.4rem);
+      line-height: 0.98;
+      margin: 0 0 18px;
+      max-width: 850px;
+    }
+
+    .subtitle {
+      font-size: 1.1rem;
+      max-width: 820px;
+      color: #f8ead6;
+      margin: 0;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 28px;
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.22);
+      color: #fff7e8;
+      font-size: 0.88rem;
+    }
+
+    nav {
+      margin: 24px 0;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    nav a {
+      text-decoration: none;
+      color: var(--ink);
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 14px;
+      font-weight: 700;
+      box-shadow: 0 6px 18px rgba(62, 45, 25, 0.08);
+    }
+
+    nav a:hover {
+      border-color: var(--brand);
+      color: var(--brand);
+    }
+
+    section {
+      margin: 24px 0;
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 28px;
+      box-shadow: 0 10px 24px rgba(62, 45, 25, 0.08);
+    }
+
+    h2 {
+      margin: 0 0 16px;
+      font-size: 1.75rem;
+      line-height: 1.15;
+      color: var(--brand);
+    }
+
+    h3 {
+      margin: 24px 0 10px;
+      color: var(--brand2);
+      font-size: 1.15rem;
+    }
+
+    p {
+      margin: 0 0 14px;
+    }
+
+    ul {
+      margin-top: 8px;
+      padding-left: 22px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .card {
+      background: #fffdf8;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 18px;
+    }
+
+    .card strong {
+      color: var(--brand);
+    }
+
+    .ok {
+      border-left: 6px solid var(--ok);
+    }
+
+    .warn {
+      border-left: 6px solid var(--accent);
+    }
+
+    .risk {
+      border-left: 6px solid var(--danger);
+    }
+
+    .note {
+      background: #f2e6d4;
+      border: 1px solid #d2b58e;
+      border-radius: 18px;
+      padding: 16px;
+      color: #3e3328;
+    }
+
+    .flow {
+      counter-reset: step;
+      display: grid;
+      gap: 12px;
+    }
+
+    .step {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 14px;
+      align-items: start;
+      background: #fffdf8;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .step::before {
+      content: counter(step);
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: var(--brand2);
+      color: white;
+      font-weight: 800;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 14px 0 6px;
+      overflow: hidden;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: #fffdf8;
+    }
+
+    th, td {
+      border-bottom: 1px solid var(--line);
+      padding: 12px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #ead6ba;
+      color: #33261b;
+      font-size: 0.9rem;
+    }
+
+    tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--soft);
+      color: var(--brand);
+      font-size: 0.78rem;
+      font-weight: 700;
+      margin: 2px;
+    }
+
+    .quote {
+      font-size: 1.1rem;
+      border-left: 6px solid var(--brand2);
+      padding: 16px 18px;
+      background: #eef6f3;
+      border-radius: 14px;
+      margin: 16px 0;
+    }
+
+    .budget {
+      font-variant-numeric: tabular-nums;
+    }
+
+    footer {
+      color: var(--muted);
+      margin-top: 24px;
+      font-size: 0.9rem;
+      padding: 20px;
+    }
+
+    @media (max-width: 850px) {
+      header {
+        padding: 28px;
+      }
+
+      nav,
+      .grid,
+      .grid-3 {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 22px;
+      }
+
+      table {
+        display: block;
+        overflow-x: auto;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+      }
+
+      .page {
+        width: 100%;
+        padding: 0;
+      }
+
+      header, section {
+        box-shadow: none;
+        break-inside: avoid;
+      }
+
+      nav {
+        display: none;
+      }
+
+      a {
+        color: inherit;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header>
+      <div class="eyebrow">Estratégia de viabilidade | Edital + Planetários + Cooperativa</div>
+      <h1>Experiência Imersiva Multilinguagens para Planetário Digital</h1>
+      <p class="subtitle">
+        Síntese estratégica para estruturar um projeto cultural com instalação imersiva no foyer,
+        espetáculo fulldome no domo, ação formativa, carta de anuência dos espaços e segurança
+        jurídica, contábil e documental.
+      </p>
+      <div class="meta">
+        <span class="pill">Base: Edital LMIC Multilinguagens 2025</span>
+        <span class="pill">Referência: Planetário e Fachada Digital UFMG</span>
+        <span class="pill">Uso: preparação para edital 2026</span>
+      </div>
+    </header>
+
+    <nav>
+      <a href="#tese">Tese estratégica</a>
+      <a href="#edital">Regras do edital</a>
+      <a href="#cooperativa">Cooperativa</a>
+      <a href="#planetarios">Planetários</a>
+      <a href="#juridico">Jurídico</a>
+      <a href="#contabil">Contábil</a>
+      <a href="#documentos">Documentos</a>
+      <a href="#cronograma">Plano de ação</a>
+    </nav>
+
+    <section id="tese">
+      <h2>1. Tese estratégica do projeto</h2>
+      <div class="quote">
+        Propor uma experiência imersiva modular composta por instalação sensorial no foyer,
+        espetáculo fulldome no planetário digital e ação formativa, com potencial de circulação
+        por museus, planetários, centros culturais, universidades e festivais de ciência, arte e tecnologia.
+      </div>
+
+      <div class="grid-3">
+        <div class="card ok">
+          <strong>Módulo 1 — Foyer</strong>
+          <p>Instalação leve, transportável e acessível, funcionando como acolhimento, mediação e ambientação.</p>
+          <span class="tag">painéis</span><span class="tag">escuta</span><span class="tag">QR codes</span><span class="tag">texto curatorial</span>
+        </div>
+        <div class="card ok">
+          <strong>Módulo 2 — Domo</strong>
+          <p>Espetáculo fulldome com arte sonora, música espacializada, visualidade imersiva, narração e astronomia cultural.</p>
+          <span class="tag">fulldome</span><span class="tag">som espacializado</span><span class="tag">performance</span>
+        </div>
+        <div class="card ok">
+          <strong>Módulo 3 — Formação</strong>
+          <p>Sessão comentada, conversa pública ou oficina curta sobre criação imersiva, som, ciência e cultura digital.</p>
+          <span class="tag">contrapartida</span><span class="tag">mediação</span><span class="tag">formação de público</span>
+        </div>
+      </div>
+
+      <h3>Nome de trabalho</h3>
+      <p><strong>Cosmos Sensível — experiência imersiva de arte sonora, céu e cidade.</strong></p>
+
+      <h3>Formulação recomendada</h3>
+      <p>
+        Usar termos como <strong>experiência imersiva multilinguagens</strong>, <strong>obra-instalação para planetário
+        e espaço expositivo</strong>, <strong>espetáculo artístico-científico</strong> e <strong>arte, ciência e tecnologia</strong>.
+        Evitar enquadrar como “festival audiovisual” ou “produto audiovisual”, pois o edital analisado exclui projetos
+        cujo objeto central seja audiovisual, embora aceite elementos audiovisuais complementares.
+      </p>
+    </section>
+
+    <section id="edital">
+      <h2>2. Regras centrais do edital a observar</h2>
+
+      <div class="grid">
+        <div class="card warn">
+          <strong>Proponente</strong>
+          <p>
+            O edital 2025 aceitava pessoa física maior de 18 anos ou pessoa jurídica sem fins lucrativos,
+            de direito privado e de caráter cultural, com domicílio ou sede em Belo Horizonte.
+          </p>
+        </div>
+        <div class="card warn">
+          <strong>Uma inscrição por proponente</strong>
+          <p>
+            Cada proponente podia inscrever apenas um projeto. Se a cooperativa for proponente direta,
+            ela tende a concentrar essa possibilidade em um único projeto.
+          </p>
+        </div>
+        <div class="card warn">
+          <strong>Objeto cultural</strong>
+          <p>
+            O projeto precisa ter caráter artístico e cultural, com coerência entre conceito, equipe,
+            orçamento, cronograma, acessibilidade, democratização e contrapartida.
+          </p>
+        </div>
+        <div class="card warn">
+          <strong>Audiovisual como cuidado</strong>
+          <p>
+            Projetos centrais do setor audiovisual eram remetidos a edital próprio. A estratégia é formular
+            a proposta como multilinguagens, cênico-sonora, museal, educativa e imersiva.
+          </p>
+        </div>
+      </div>
+
+      <h3>Categoria provável</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Categoria possível</th>
+            <th>Uso estratégico</th>
+            <th>Teto 2025</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Produção/montagem de exposições, espetáculos, shows, eventos de moda e congêneres</td>
+            <td>Melhor encaixe para espetáculo fulldome com instalação no foyer</td>
+            <td class="budget">R$ 90.000</td>
+          </tr>
+          <tr>
+            <td>Mostras, feiras, festejos populares e festivais</td>
+            <td>Interessante se virar programação ampliada, com múltiplas sessões, convidados e atividades</td>
+            <td class="budget">R$ 100.000</td>
+          </tr>
+          <tr>
+            <td>Projetos experimentais/inovadores que não se enquadrem diretamente nas demais categorias</td>
+            <td>Conceitualmente possível, mas com teto menor</td>
+            <td class="budget">R$ 40.000</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Critérios que a proposta deve atacar diretamente</h3>
+      <ul>
+        <li><strong>Consistência:</strong> conceito, relevância cultural, originalidade e clareza.</li>
+        <li><strong>Exequibilidade:</strong> equipe experiente, orçamento defensável, cronograma realista e carta de anuência.</li>
+        <li><strong>Impacto:</strong> formação de público, retorno social, circulação, geração de trabalho e renda.</li>
+        <li><strong>Acessibilidade e democratização:</strong> ações distintas, mensuráveis e comprováveis.</li>
+      </ul>
+    </section>
+
+    <section id="cooperativa">
+      <h2>3. Estratégia com a cooperativa</h2>
+
+      <div class="note">
+        <strong>Ponto de decisão:</strong> antes de definir a cooperativa como proponente, verificar se ela é
+        juridicamente compatível com o edital: entidade de direito privado, sem fins lucrativos, com caráter cultural,
+        sede em Belo Horizonte e documentação regular.
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Cenário</th>
+            <th>Vantagem</th>
+            <th>Risco</th>
+            <th>Recomendação</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cooperativa como proponente</td>
+            <td>Pode dar força institucional e administrativa</td>
+            <td>Se outro cooperado usar a cooperativa, pode haver conflito de uma inscrição por proponente</td>
+            <td>Usar apenas se a diretoria confirmar disponibilidade e compatibilidade jurídica</td>
+          </tr>
+          <tr>
+            <td>Você como pessoa física proponente</td>
+            <td>Mais simples e direto, aproveita seu currículo de planetarista</td>
+            <td>Responsabilidade legal e prestação de contas ficam concentradas em você</td>
+            <td>Cenário mais seguro se a cooperativa tiver outros projetos</td>
+          </tr>
+          <tr>
+            <td>Cooperativa como parceira/prestadora</td>
+            <td>Apoia sem disputar a titularidade do projeto</td>
+            <td>Precisa evitar conflito de interesses e documentar as contratações</td>
+            <td>Boa alternativa, desde que formalizada por carta, contrato ou declaração</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Perguntas objetivas para a diretoria</h3>
+      <ul>
+        <li>A cooperativa pretende ser proponente direta de algum projeto no edital?</li>
+        <li>O estatuto permite atuação cultural, artística, educativa ou científico-cultural?</li>
+        <li>A cooperativa é considerada sem fins lucrativos para fins do edital?</li>
+        <li>Há sede comprovável em Belo Horizonte?</li>
+        <li>A cooperativa pode emitir documentos, notas, contratos ou declarações necessárias?</li>
+        <li>Haveria algum conflito se um cooperado fosse proponente pessoa física e a cooperativa aparecesse como parceira?</li>
+      </ul>
+    </section>
+
+    <section id="planetarios">
+      <h2>4. Estratégia com planetários e espaços museais</h2>
+
+      <p>
+        A prioridade imediata é construir um <strong>dossiê de anuência e viabilidade</strong>. Esse documento deve
+        demonstrar que o projeto é compatível com planetários, museus, espaços científico-culturais e equipamentos
+        multiuso.
+      </p>
+
+      <div class="grid">
+        <div class="card ok">
+          <strong>Abordagem recomendada</strong>
+          <p>Consultar dois planetários em paralelo, com transparência, buscando viabilidade técnica, aderência curatorial e carta de anuência condicionada.</p>
+        </div>
+        <div class="card risk">
+          <strong>O que evitar</strong>
+          <p>Prometer exclusividade para dois espaços, depender de uma única agenda ou transformar a fachada digital em obrigação central sem aprovação curatorial.</p>
+        </div>
+      </div>
+
+      <h3>Planetário UFMG e Fachada Digital</h3>
+      <p>
+        O regulamento do Espaço do Conhecimento UFMG valoriza ações integradas de divulgação científica,
+        cultural e artística, especialmente interdisciplinares. Também reconhece performances artísticas e
+        interativas no Planetário e a Fachada Digital como interface entre museu e cidade.
+      </p>
+
+      <h3>Como incluir a Fachada Digital</h3>
+      <p>
+        A Fachada Digital deve entrar como <strong>ação complementar de difusão urbana</strong>, não como condição
+        indispensável para a execução do projeto.
+      </p>
+
+      <div class="quote">
+        Além das sessões imersivas no Planetário, o projeto prevê, como ação complementar sujeita à aprovação
+        curatorial e disponibilidade institucional, o desenvolvimento de uma peça audiovisual curta para a Fachada
+        Digital, ampliando o diálogo entre arte, ciência, cidade e público noturno do Circuito Liberdade.
+      </div>
+
+      <h3>O que solicitar aos espaços</h3>
+      <ul>
+        <li>Carta de anuência ou carta de intenção condicionada à aprovação no edital.</li>
+        <li>Informações técnicas do domo, projetores, formato de arquivo, áudio e operação.</li>
+        <li>Condições de uso, custos, contrapartidas, datas possíveis e exigências curatoriais.</li>
+        <li>Possibilidade de teste técnico e sessão piloto.</li>
+        <li>Regras para uso de foyer, recepção, sala multiuso ou fachada digital.</li>
+      </ul>
+    </section>
+
+    <section id="juridico">
+      <h2>5. Abordagem jurídica</h2>
+
+      <div class="note">
+        Este documento é uma orientação estratégica preliminar. Antes da submissão, recomenda-se validação com
+        advogado, contador e com o canal oficial do edital.
+      </div>
+
+      <div class="grid">
+        <div class="card ok">
+          <strong>Direitos autorais</strong>
+          <p>
+            Usar apenas música, imagens, vídeos, textos, narração e softwares com licença adequada, domínio público,
+            cessão formal ou criação original.
+          </p>
+        </div>
+        <div class="card ok">
+          <strong>Imagem e voz</strong>
+          <p>
+            Obter autorização de uso de imagem e voz para registros de equipe, público identificável, performers,
+            narradores e participantes de oficinas.
+          </p>
+        </div>
+        <div class="card ok">
+          <strong>Contratos</strong>
+          <p>
+            Formalizar contratação de artistas, técnicos, produtores, acessibilidade, comunicação e fornecedores,
+            definindo escopo, prazo, entrega, valor bruto e responsabilidade fiscal.
+          </p>
+        </div>
+        <div class="card risk">
+          <strong>Conteúdo de terceiros</strong>
+          <p>
+            Registros antigos com trilhas de artistas como Pink Floyd e Björk podem comprovar experiência histórica,
+            mas não devem ser reutilizados como material do projeto sem licenças.
+          </p>
+        </div>
+      </div>
+
+      <h3>Riscos jurídicos principais</h3>
+      <ul>
+        <li>Prometer espaço sem anuência mínima ou sem condição técnica confirmada.</li>
+        <li>Confundir contrapartida, democratização e acessibilidade em uma mesma ação.</li>
+        <li>Usar conteúdo sem licença, inclusive material gerado por inteligência artificial sem controle das bases utilizadas.</li>
+        <li>Não prever responsabilidade por cancelamento, readequação, substituição de equipe ou mudança de data.</li>
+        <li>Incluir caráter comercial, institucional ou promocional incompatível com a finalidade cultural/científica do espaço.</li>
+      </ul>
+    </section>
+
+    <section id="contabil">
+      <h2>6. Abordagem contábil e orçamentária</h2>
+
+      <p>
+        A planilha deve trabalhar com <strong>valores brutos</strong>, isto é, valores que considerem tributos,
+        retenções, encargos e custos reais de contratação, conforme a natureza de cada prestador ou fornecedor.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Regra orçamentária</th>
+            <th>Aplicação no projeto de R$ 90.000</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Elaboração do projeto limitada a 5%</td>
+            <td class="budget">Até R$ 4.500</td>
+          </tr>
+          <tr>
+            <td>Administração limitada a 15% para a maioria dos projetos</td>
+            <td class="budget">Até R$ 13.500</td>
+          </tr>
+          <tr>
+            <td>Remuneração total de uma mesma pessoa física ou MEI limitada a 25%</td>
+            <td class="budget">Até R$ 22.500</td>
+          </tr>
+          <tr>
+            <td>Cortes pela Câmara, em regra, limitados a 15%</td>
+            <td class="budget">Risco aproximado de até R$ 13.500 em cortes</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Orçamento-base revisado por módulos</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Grupo de despesa</th>
+            <th>Valor estimado</th>
+            <th>Observação contábil</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Direção, concepção e roteiro</td>
+            <td class="budget">R$ 10.000</td>
+            <td>Valor bruto. Pode compor remuneração do proponente se estiver no limite individual.</td>
+          </tr>
+          <tr>
+            <td>Produção executiva</td>
+            <td class="budget">R$ 9.000</td>
+            <td>Preferir escopo detalhado: planejamento, contratações, logística, relatórios.</td>
+          </tr>
+          <tr>
+            <td>Criação sonora, música e mixagem imersiva</td>
+            <td class="budget">R$ 12.000</td>
+            <td>Prever criação original e cessão/licença de uso no projeto.</td>
+          </tr>
+          <tr>
+            <td>Criação visual fulldome e arte digital</td>
+            <td class="budget">R$ 16.000</td>
+            <td>Detalhar animação, adaptação técnica, renderização e entrega nos formatos exigidos.</td>
+          </tr>
+          <tr>
+            <td>Cachês de artistas, narrador ou performer</td>
+            <td class="budget">R$ 8.000</td>
+            <td>Formalizar cessão de imagem, voz e direitos conexos, se aplicável.</td>
+          </tr>
+          <tr>
+            <td>Operação técnica e adaptação ao planetário</td>
+            <td class="budget">R$ 7.000</td>
+            <td>Incluir testes, operação de sessão e eventual conversão técnica.</td>
+          </tr>
+          <tr>
+            <td>Locação, pauta ou custos do espaço</td>
+            <td class="budget">R$ 8.000</td>
+            <td>Confirmar política de cobrança, contrapartida institucional ou cessão não onerosa.</td>
+          </tr>
+          <tr>
+            <td>Instalação no foyer</td>
+            <td class="budget">R$ 5.000</td>
+            <td>Estrutura leve: painéis, impressão, escuta, montagem, transporte e mediação.</td>
+          </tr>
+          <tr>
+            <td>Acessibilidade</td>
+            <td class="budget">R$ 5.000</td>
+            <td>Consultoria, legendagem, Libras, roteiro acessível ou mediação, conforme decisão.</td>
+          </tr>
+          <tr>
+            <td>Comunicação e design</td>
+            <td class="budget">R$ 4.000</td>
+            <td>Peças digitais, identidade visual, assessoria simples e materiais de divulgação.</td>
+          </tr>
+          <tr>
+            <td>Registro e documentação</td>
+            <td class="budget">R$ 4.000</td>
+            <td>Fotos, vídeo curto, relatório e documentação para prestação de contas.</td>
+          </tr>
+          <tr>
+            <td>Administração do projeto</td>
+            <td class="budget">R$ 3.000</td>
+            <td>Apoio financeiro, organização documental, controle de comprovantes.</td>
+          </tr>
+          <tr>
+            <td>Elaboração do projeto</td>
+            <td class="budget">R$ 2.000</td>
+            <td>Abaixo do teto de 5%.</td>
+          </tr>
+          <tr>
+            <th>Total estimado</th>
+            <th class="budget">R$ 93.000</th>
+            <th>Ajustar para o teto da categoria escolhida. Se a categoria for R$ 90.000, cortar R$ 3.000.</th>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="note">
+        <strong>Ajuste necessário:</strong> se o teto for R$ 90.000, reduzir R$ 3.000. Sugestões: reduzir comunicação,
+        administração, instalação no foyer ou locação, conforme anuência do espaço.
+      </div>
+
+      <h3>Prestação de contas: lógica de arquivo</h3>
+      <ul>
+        <li>Conta bancária exclusiva do projeto.</li>
+        <li>Pagamentos somente após assinatura do termo, salvo regra específica em contrário.</li>
+        <li>Notas fiscais, recibos, contratos, comprovantes de pagamento e extratos organizados por rubrica.</li>
+        <li>Registro de execução: fotos, vídeos, listas de presença, declarações de espaço, prints de divulgação.</li>
+        <li>Comprovação separada de acessibilidade, democratização do acesso e contrapartida sociocultural.</li>
+      </ul>
+    </section>
+
+    <section id="documentos">
+      <h2>7. Dossiê prioritário para anuência</h2>
+
+      <p>
+        Como o edital está previsto para sair em breve, o documento mais urgente é o dossiê que será enviado aos
+        planetários e espaços parceiros.
+      </p>
+
+      <div class="flow">
+        <div class="step">
+          <div>
+            <strong>Capa e síntese</strong>
+            <p>Título, subtítulo, frase de impacto, proponente, contatos e versão do documento.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Justificativa</strong>
+            <p>Relação entre arte, ciência, cultura, planetário, cidade, formação de público e inovação.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Experiência do proponente</strong>
+            <p>Atuação prévia como planetarista, recepção de estudantes, sessões especiais, som ao vivo e domínio técnico do ambiente de planetário.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Descrição da obra</strong>
+            <p>Instalação no foyer, espetáculo fulldome, ação formativa e eventual desdobramento para Fachada Digital.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Necessidades técnicas</strong>
+            <p>Formato fulldome, áudio, duração, testes, operação, montagem do foyer, acessibilidade e documentação.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Pedido de anuência</strong>
+            <p>Carta de intenção condicionada à aprovação no edital, agenda, ajustes técnicos e aprovação curatorial.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Material comprobatório do proponente</h3>
+      <ul>
+        <li>Fotos de trabalho anterior em planetário.</li>
+        <li>Registros de sessões com público escolar.</li>
+        <li>Vídeos promocionais de sessões especiais, usados como comprovação de trajetória.</li>
+        <li>Materiais gráficos ou publicações institucionais, quando existirem.</li>
+        <li>Breve memorial profissional em primeira ou terceira pessoa.</li>
+      </ul>
+    </section>
+
+    <section id="cronograma">
+      <h2>8. Plano de ação imediato</h2>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Prioridade</th>
+            <th>Ação</th>
+            <th>Prazo ideal</th>
+            <th>Resultado esperado</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>Montar dossiê de anuência com 6 a 10 páginas</td>
+            <td>3 a 5 dias</td>
+            <td>Documento pronto para envio aos planetários</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td>Selecionar fotos e vídeos comprobatórios</td>
+            <td>2 a 4 dias</td>
+            <td>Portfólio técnico-curatorial do proponente</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Enviar consulta aos dois planetários</td>
+            <td>Imediato após dossiê</td>
+            <td>Reunião, resposta técnica ou anuência condicionada</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td>Verificar cooperativa</td>
+            <td>Paralelo</td>
+            <td>Decidir proponente: pessoa física ou cooperativa</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td>Levantar orçamento com valores brutos</td>
+            <td>1 semana</td>
+            <td>Planilha defensável e compatível com o teto</td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td>Preparar matriz de riscos</td>
+            <td>Antes da inscrição</td>
+            <td>Plano B para espaço, equipe, orçamento e cronograma</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Decisão recomendada</h3>
+      <div class="quote">
+        Trabalhar com você como possível proponente pessoa física, caso a cooperativa tenha risco de conflito,
+        e usar a cooperativa como parceira ou apoio administrativo apenas se isso for juridicamente seguro.
+        Buscar anuência de dois planetários, mas escolher um espaço principal antes da inscrição.
+      </div>
+    </section>
+
+    <footer>
+      Documento de trabalho para estruturação estratégica. Baseado no edital LMIC Multilinguagens 2025,
+      no regulamento curatorial do Planetário/Fachada Digital do Espaço do Conhecimento UFMG e nas informações
+      profissionais fornecidas pelo proponente. Validar a versão final com o edital 2026, canal oficial do órgão gestor,
+      contador e assessoria jurídica.
+    </footer>
+  </main>
+</body>
+</html>
